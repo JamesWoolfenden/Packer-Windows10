@@ -1,0 +1,22 @@
+Enable-PSRemoting –force
+``
+WinRM has been updated to receive requests.
+WinRM service type changed successfully.
+WinRM service started.
+
+Set-WSManQuickConfig : <f:WSManFault xmlns:f="http://schemas.microsoft.com/wbem/wsman/1/wsmanfault" Code="2150859113" Machine="localhost"><f:Message><f:ProviderFault provider="Config provider"
+path="%systemroot%\system32\WsmSvc.dll"><f:WSManFault xmlns:f="http://schemas.microsoft.com/wbem/wsman/1/wsmanfault" Code="2150859113" Machine="23043-5510.2d.hq"><f:Message>WinRM firewall exception will not work since one of the
+network connection types on this machine is set to Public. Change the network connection type to either Domain or Private and try again. </f:Message></f:WSManFault></f:ProviderFault></f:Message></f:WSManFault>
+At line:116 char:17
++                 Set-WSManQuickConfig -force
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) [Set-WSManQuickConfig], InvalidOperationException
+    + FullyQualifiedErrorId : WsManError,Microsoft.WSMan.Management.SetWSManQuickConfigCommand
+```
+
+```
+Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
+
+# Verify start mode and state - it should be running
+Get-WmiObject -Class win32_service | Where-Object {$_.name -like "WinRM"}
+```

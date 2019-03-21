@@ -1,8 +1,72 @@
 # Packer-Windows10
 
-A Packer build to make a pretty vanilla Windows 10 x64 box for use with VMWare Desktop or Virtualbox.
+Adapted from <https://github.com/luciusbono/Packer-Windows10>
 
-This project is just a clone of my [other Windows Packer project](https://github.com/luciusbono/Packer-Windows81) with some very minor changes. Eventually the two projects will merge and form like Voltron.
+A Packer build to make a Windows 10 x64 box/ISO via Hyper-V.
+
+The basics.
+
+```base.json
+{
+    "variables": {
+        "iso_path": "",
+        "iso_checksum": "",
+        "iso_checksum_type":"SHA256";
+        "switch_name": "Default Switch"
+    },
+    "builders": [
+        {
+            "type": "hyperv-iso",
+            "communicator": "winrm",
+            "disk_size": 61440,
+            "floppy_files": [
+                "Autounattend.xml",
+                "update-windows.ps1",
+                "configure-winrm.ps1"
+            ],
+            "headless": true,
+            "iso_url": "{{user `iso_path`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "winrm_username": "vagrant",
+            "winrm_password": "vagrant",
+            "winrm_timeout": "6h",
+            "switch_name": "{{user `switch_name`}}",
+            "skip_compaction": false,
+            "shutdown_command": "shutdown /s /t 5 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "generation": "1"
+        }
+    ]
+}
+```
+
+```powershell
+get-filehash  C:\code\packt\Image-Creation-using-Packer\packt-packer-iso\ISO\Windows10.iso
+
+Algorithm       Hash                                                                   Path
+---------       ----                                                                   ----
+SHA256          DBFE87E774A723779509A340059416C1B2C9E8D71744CF8600339690B5007AC9       C:\code\packt\Image-Creation-...
+```
+
+Now we can update the template with the ISO and the checksum.
+
+```packer
+packer validate .\base.json
+Template validated successfully.
+```
+
+Enable-PSRemoting –force
+
+
+A windows installer needs a answer file - Autounattend.xml 
+
+
+
+
+
+
+
+
 
 
 In essence, the build does the following:

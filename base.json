@@ -1,0 +1,32 @@
+{
+    "variables": {
+        "iso_path": "C:\\code\\packt\\Image-Creation-using-Packer\\packt-packer-iso\\ISO\\Windows10.iso",
+        "iso_checksum": "DBFE87E774A723779509A340059416C1B2C9E8D71744CF8600339690B5007AC9",
+        "iso_checksum_type": "SHA256",
+        "switch_name": "External Switch"
+    },
+    "builders": [
+        {
+            "type": "hyperv-iso",
+            "communicator": "winrm",
+            "switch_name": "{{user `switch_name`}}",
+            "disk_size": 61440,
+            "floppy_files": [
+                "Autounattend.xml",
+                "update-windows.ps1",
+                "configure-winrm.ps1"
+            ],
+            "headless": true,
+            "iso_url": "{{user `iso_path`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "winrm_username": "vagrant",
+            "winrm_password": "vagrant",
+            "winrm_timeout": "6h",
+            "skip_compaction": false,
+            "shutdown_command": "shutdown /s /t 5 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "generation": "1",
+            "vm_name":"packer"
+        }
+    ]
+}
