@@ -123,19 +123,21 @@ The `packer.json` file requires two variables to validate. You can confirm these
 
 ```
 $ packer inspect packer.json 
-Optional variables and their defaults:
-
-  iso_md5  = 
-  iso_path = 
+  iso_md5     =
+  iso_path    =
+  switch_name = Default Switch
 
 Builders:
 
+  hyperv-iso
+  parallels-iso
   virtualbox-iso
-  vmware-iso    
+  vmware-iso
 
 Provisioners:
 
   powershell
+  windows-restart
 ```
 
 Since there are two Builders, you also likely want to specify one or the other. 
@@ -162,5 +164,7 @@ The vagrantfile template disables the `SharedFoldersEnableSymlinksCreate` option
 
 ### vagrant rdp prompts for login credentials but vagrant/vagrant does not work
 I ran into this issue on a Windows 10 host with this project. I [submitted an issue](https://github.com/mitchellh/vagrant/issues/6358). The resolution is to choose `Use another account` and login with `.\vagrant` as the login and `vagrant` as the password. Unforuntately, it appears that one must log in with these credentials in this manner each time you `vagrant rdp` (unless that issue says otherwise...). 
+
+`vagrant rdp -- /public` will also force mstsc into "public mode" which will clear the credentials dialogs each time. 
 
 
